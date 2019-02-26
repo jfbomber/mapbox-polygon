@@ -40,6 +40,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MGLMapboxAccessToken</key>
-	<string></string>
+	<string>YOUR-KEY-HERE</string>
 </dict>
 </plist>
