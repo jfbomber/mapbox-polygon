@@ -32,6 +32,21 @@ class MapDrawView: UIView {
         self.canvas = UIImageView(frame: CGRect(x: 0.0, y: 0.0, width: frame.width, height: frame.height))
         super.init(frame: frame)
         self.addSubview(canvas)
+        
+        /// This lets the user know they are in draw mode
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .white
+        label.tintColor = .black
+        label.text = "Draw Mode"
+        self.addSubview(label)
+        
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            label.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant : -20),
+            label.heightAnchor.constraint(equalToConstant: 25.0),
+        
+        ])
     }
     
     required init?(coder aDecoder: NSCoder) {

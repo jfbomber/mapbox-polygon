@@ -40,18 +40,22 @@ class RootViewController: UIViewController {
             toolBar.heightAnchor.constraint(equalToConstant: toolbarHeight)
         ])
         
-        /// Create Toolbar Buttons
+        // Create Toolbar Buttons
+        // Sets the map into a draw mode, so we can draw polygons
         let drawBarButton = UIBarButtonItem(title: "Draw", style: .plain, target: self, action: #selector(self.drawMode))
+        // View, switches the style URL
         let viewButton = UIBarButtonItem(title: "View", style: .plain, target: self, action: #selector(self.changeView))
+        // Removes the drawn polygons
         let clearButton = UIBarButtonItem(title: "Clear Polygons", style: .plain, target: self, action: #selector(self.clearPolygons))
-        
         
         toolBar.items = [drawBarButton, viewButton, clearButton]
         
+        // Creates the MapBox MapView
         mapView.delegate = self
         mapView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(mapView)
-
+        
+        // sets the constraints for the map view
         NSLayoutConstraint.activate([
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -59,12 +63,7 @@ class RootViewController: UIViewController {
             mapView.bottomAnchor.constraint(equalTo: toolBar.topAnchor)
         ])
         
-        self.loadMapView()
-    }
-
-    
-    func loadMapView() {
-        // Puts the center of the map on a lat long on URE Headquarters
+        // Set up the map view
         let startingCoordinate = CLLocationCoordinate2D(latitude: 40.578679, longitude: -111.892347)
         mapView.setCenter(startingCoordinate, zoomLevel : 12, animated: false)
         
@@ -72,23 +71,22 @@ class RootViewController: UIViewController {
         // .satelliteStyleURL, .streetsStyleURL, .lightStyleURL
         mapView.styleURL = MGLStyle.streetsStyleURL
         
-        
-        let ureHeadquarters = MGLPointAnnotation()
-        ureHeadquarters.coordinate = startingCoordinate
-        ureHeadquarters.title = "URE"
-        ureHeadquarters.subtitle = "Headquarters for all things URE!"
-        mapView.addAnnotation(ureHeadquarters)
+        // Adding two different markers the first on is the default marker, the second will be a custom one using a view
+        let defaultMarker = MGLPointAnnotation()
+        defaultMarker.coordinate = startingCoordinate
+        defaultMarker.title = "Default"
+        defaultMarker.subtitle = "This is a default marker!"
+        mapView.addAnnotation(defaultMarker)
         
         let listingCoordinate = CLLocationCoordinate2D(latitude: 40.574679, longitude: -111.898347)
-        let listingMarker = CustomMGLPointAnnotation()
-        listingMarker.useCircle = true
-        listingMarker.coordinate = listingCoordinate
-        listingMarker.title = "Not URE"
-        listingMarker.subtitle = "Not the headquarters for all things URE!"
-        mapView.addAnnotation(listingMarker)
+        let customCircleMarker = CustomMGLPointAnnotation()
+        customCircleMarker.useCircle = true
+        customCircleMarker.coordinate = listingCoordinate
+        customCircleMarker.title = "Circle marker"
+        customCircleMarker.subtitle = "This is not the default marker but a custom marker!"
+        mapView.addAnnotation(customCircleMarker)
     }
-    
-    
+
     ///
     /// Sets the draw mode
     /// When the draw mode is set to true then the user will be able to draw a polygon.
@@ -107,10 +105,6 @@ class RootViewController: UIViewController {
         } else {
             isDrawMode = true
         }
-        
-        print("map view isDrawMode:\(isDrawMode)")
-        print("mapDrawView is Hidden : \(mapDrawView!.isHidden)")
-        
     }
     
     ///
@@ -140,7 +134,9 @@ class RootViewController: UIViewController {
     }
     
     
-    
+    ///
+    /// Creats a polygon from the points created in the MapDrawView
+    ///
     func addPolygonWithPoints(_ points : [CGPoint]) {
         guard points.count != 0 else { return }
         
@@ -156,6 +152,8 @@ class RootViewController: UIViewController {
     }
 }
 
+
+// MARK: MapDrawViewDelegate
 extension RootViewController : MapDrawViewDelegate {
     func polygonFinish(points : [CGPoint]) {
         addPolygonWithPoints(points)
@@ -163,6 +161,8 @@ extension RootViewController : MapDrawViewDelegate {
 }
 
 
+
+// MARK: MGLMapViewDelegate
 extension RootViewController : MGLMapViewDelegate {
     func mapView(_ mapView: MGLMapView, annotationCanShowCallout annotation: MGLAnnotation) -> Bool {
         // Always allow callouts to popup when annotations are tapped.
