@@ -8,12 +8,18 @@
 
 import UIKit
 import Mapbox
+import MapboxGeocoder
 
 class RootViewController: UIViewController {
 
     let mapView = MGLMapView()
+    lazy var geocoder : Geocoder = {
+        let accessToken = Bundle.main.infoDictionary?["MGLMapboxAccessToken"] as! String
+        return Geocoder(accessToken: accessToken)
+    }()
     
     private var mapDrawView : MapDrawView?
+    private let searchTextField = UITextField()
     
     private var toolBar : UIToolbar!
     
@@ -25,7 +31,6 @@ class RootViewController: UIViewController {
         super.viewDidLoad()
 
         let toolbarHeight : CGFloat = 50
-
         toolBar = UIToolbar()
         toolBar.translatesAutoresizingMaskIntoConstraints = false
         toolBar.barStyle = .default
@@ -85,6 +90,47 @@ class RootViewController: UIViewController {
         customCircleMarker.title = "Circle marker"
         customCircleMarker.subtitle = "This is not the default marker but a custom marker!"
         mapView.addAnnotation(customCircleMarker)
+        
+        // Setup the search bar view
+        let searchView = UIView()
+        searchView.translatesAutoresizingMaskIntoConstraints = false
+        searchView.backgroundColor = .white
+        view.addSubview(searchView)
+        
+        NSLayoutConstraint.activate([
+            searchView.topAnchor.constraint(equalTo: view.topAnchor, constant : 50.0),
+            searchView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            searchView.heightAnchor.constraint(equalToConstant: 35.0),
+            searchView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.90) // 90% the width of its parent
+        ])
+        
+        
+        searchTextField.translatesAutoresizingMaskIntoConstraints = false
+        searchTextField.placeholder = "Enter address, zip, state"
+        searchView.addSubview(searchTextField)
+        
+        NSLayoutConstraint.activate([
+            searchTextField.topAnchor.constraint(equalTo: searchView.topAnchor, constant : 0.0),
+            searchTextField.leadingAnchor.constraint(equalTo: searchView.leadingAnchor, constant: 5),
+            searchTextField.heightAnchor.constraint(equalTo : searchView.heightAnchor),
+            searchTextField.widthAnchor.constraint(equalTo: searchView.widthAnchor, multiplier: 0.75) // 90% the width of its parent
+        ])
+        
+        let searchButton = UIButton(type: .custom)
+        searchButton.translatesAutoresizingMaskIntoConstraints = false
+        searchButton.setTitle("Search", for: .normal)
+        searchButton.setTitleColor(.black, for: .normal)
+        searchButton.titleLabel?.font = .systemFont(ofSize:12.0)
+        searchButton.addTarget(self, action: #selector(self.geocode), for: .touchUpInside)
+        searchView.addSubview(searchButton)
+        
+        NSLayoutConstraint.activate([
+            searchButton.topAnchor.constraint(equalTo: searchView.topAnchor, constant : 0.0),
+            searchButton.trailingAnchor.constraint(equalTo: searchView.trailingAnchor, constant: -0.5),
+            searchButton.heightAnchor.constraint(equalTo : searchView.heightAnchor),
+            searchButton.widthAnchor.constraint(equalTo: searchView.widthAnchor, multiplier: 0.15) // 90% the width of its parent
+        ])
+        
     }
 
     ///
@@ -131,6 +177,41 @@ class RootViewController: UIViewController {
         } else if mapView.styleURL == MGLStyle.streetsStyleURL {
              mapView.styleURL =  MGLStyle.darkStyleURL
         }
+    }
+    
+    
+    ///
+    /// Finds the location entered
+    ///
+    @objc func geocode() {
+        if let searchText = searchTextField.text {
+            let options = ForwardGeocodeOptions(query: searchText)
+            options.allowedISOCountryCodes = ["US"]
+            options.allowedScopes = [.address, .place, .postalCode, .locality, .pointOfInterest]
+            
+            let _ = geocoder.geocode(options) { (placemarks, attribute, error) in
+                // If nothing is returned then just return
+                guard let placemark = placemarks?.first else {
+                    return
+                }
+                
+                let coordinate = placemark.location!.coordinate
+                
+                let locationCoordinate = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
+                self.mapView.setCenter(locationCoordinate, animated: true)
+                
+                //
+                let locationMarker = MGLPointAnnotation()
+                locationMarker.coordinate = locationCoordinate
+                locationMarker.title = placemark.name
+                locationMarker.subtitle = placemark.qualifiedName
+                self.mapView.addAnnotation(locationMarker)
+            }
+            
+        }
+        
+        // reset the search text field
+        searchTextField.text = ""
     }
     
     

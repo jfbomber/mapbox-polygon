@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E3D3242F2B71B556425D68A0 /* libPods-MapBoxTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9664BA4BD54396737613C40B /* libPods-MapBoxTest.a */; };
+		9961F0D8345B415A77B4FDC3 /* Pods_MapBoxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CDCC1A9948DCF2D985A527A7 /* Pods_MapBoxTest.framework */; };
 		E55230CB221F3BF800796628 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55230CA221F3BF800796628 /* AppDelegate.swift */; };
 		E55230CD221F3BF800796628 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55230CC221F3BF800796628 /* RootViewController.swift */; };
 		E55230D2221F3BFA00796628 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E55230D1221F3BFA00796628 /* Assets.xcassets */; };
@@ -19,7 +19,7 @@
 /* Begin PBXFileReference section */
 		62BD08170677C969FAE861D0 /* Pods-MapBoxTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapBoxTest.release.xcconfig"; path = "Target Support Files/Pods-MapBoxTest/Pods-MapBoxTest.release.xcconfig"; sourceTree = "<group>"; };
 		6738FC977B65AE5C654456BB /* Pods-MapBoxTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MapBoxTest.debug.xcconfig"; path = "Target Support Files/Pods-MapBoxTest/Pods-MapBoxTest.debug.xcconfig"; sourceTree = "<group>"; };
-		9664BA4BD54396737613C40B /* libPods-MapBoxTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MapBoxTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CDCC1A9948DCF2D985A527A7 /* Pods_MapBoxTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MapBoxTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E55230C7221F3BF800796628 /* MapBoxTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapBoxTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E55230CA221F3BF800796628 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E55230CC221F3BF800796628 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -35,7 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3D3242F2B71B556425D68A0 /* libPods-MapBoxTest.a in Frameworks */,
+				9961F0D8345B415A77B4FDC3 /* Pods_MapBoxTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,7 +45,7 @@
 		6984C9F6121C2F3AE8865F46 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9664BA4BD54396737613C40B /* libPods-MapBoxTest.a */,
+				CDCC1A9948DCF2D985A527A7 /* Pods_MapBoxTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -192,6 +192,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-MapBoxTest/Pods-MapBoxTest-frameworks.sh",
 				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/Mapbox.framework",
 				"${PODS_ROOT}/Mapbox-iOS-SDK/dynamic/Mapbox.framework.dSYM",
+				"${BUILT_PRODUCTS_DIR}/MapboxGeocoder.swift/MapboxGeocoder.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -199,6 +200,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework",
 				"${DWARF_DSYM_FOLDER_PATH}/Mapbox.framework.dSYM",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MapboxGeocoder.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
